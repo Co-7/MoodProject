@@ -10,7 +10,8 @@ const numberDay = ref(new Date(selectedDate.value.getFullYear(), selectedDate.va
 const dateSelected = ref(new Date());
 const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const showList = ref(false);
-const prefix_date = ref(new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1).getDay());
+const prefix_date = ref(0);
+updatePrefix();
 
 function updateFocusIndex (i) {
   dateSelected.value = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), i);
@@ -31,11 +32,11 @@ function changeDate (increment) {
   updatePrefix();
 }
 
-function updatePrefix () {
+function updatePrefix() {
   const day = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1).getDay();
 
   if (day > 0)
-    prefix_date.value = day - 1;
+    prefix_date.value = (day - 1);
   else {
     prefix_date.value = 6;
   }

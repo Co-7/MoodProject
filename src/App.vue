@@ -8,8 +8,9 @@ const selectedDate = ref(new Date());
 const listMoods = ref(calendarStore.getMoodByMonth(selectedDate.value.getFullYear(), selectedDate.value.getMonth()));
 const numberDay = ref(new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth() + 1, 0).getDate());
 const dateSelected = ref(new Date());
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const showList = ref(false);
+const prefix_date = ref(new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1).getDay());
 
 function updateFocusIndex (i) {
   dateSelected.value = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), i);
@@ -27,6 +28,17 @@ function changeDate (increment) {
   selectedDate.value = new Date(selectedDate.value);
   numberDay.value = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth() + 1, 0).getDate();
   listMoods.value = calendarStore.getMoodByMonth(selectedDate.value.getFullYear(), selectedDate.value.getMonth());
+  updatePrefix();
+}
+
+function updatePrefix () {
+  const day = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1).getDay();
+
+  if (day > 0)
+    prefix_date.value = day - 1;
+  else {
+    prefix_date.value = 6;
+  }
 }
 
 </script>
@@ -41,6 +53,7 @@ function changeDate (increment) {
     <span class="day_name" v-for="day in daysOfWeek" :key="day">{{ day }}</span>
   </div>
   <div class="calendar">
+    <div class="block_calendar" v-for="i in prefix_date" :key="i"></div>
     <div class="block_calendar" v-for="i in numberDay" :key="i">
       <BlockMood
         :active="dateSelected.getDate() === i && dateSelected.getMonth() === selectedDate.getMonth() && dateSelected.getFullYear() === selectedDate.getFullYear()"
@@ -155,4 +168,5 @@ function changeDate (increment) {
   border-radius: 50px;
   font-size: 24px;
   user-select: none;
-}</style>
+}
+</style>
